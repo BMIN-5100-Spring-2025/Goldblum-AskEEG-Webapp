@@ -1,4 +1,6 @@
 .image-gallery-container {
+    width: 100%;
+    max-width: var(--content-max-width);
     padding: 2rem;
     background: linear-gradient(135deg, rgba(35, 35, 60, 0.3) 0%, rgba(25, 25, 45, 0.15) 100%);
     border-radius: 20px;
@@ -130,7 +132,7 @@
 .modal-content {
     position: relative;
     width: 90%;
-    max-width: 1200px;
+    max-width: var(--content-max-width);
     max-height: 90vh;
     background: rgba(25, 27, 40, 0.8);
     backdrop-filter: blur(16px);
