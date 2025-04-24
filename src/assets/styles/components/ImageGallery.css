@@ -1,0 +1,197 @@
+.image-gallery-container {
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(35, 35, 60, 0.3) 0%, rgba(25, 25, 45, 0.15) 100%);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(125, 125, 255, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--color-text);
+}
+
+.gallery-header h2 {
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, var(--color-accent-1), var(--color-accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.gallery-header p {
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #e4e4ff;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.image-card {
+    background: rgba(25, 27, 40, 0.5);
+    border-radius: 16px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(125, 125, 255, 0.12);
+    overflow: hidden;
+    position: relative;
+}
+
+.image-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(125, 125, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-card:hover::before {
+    opacity: 1;
+}
+
+.image-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(114, 99, 255, 0.2);
+    border-color: rgba(125, 125, 255, 0.3);
+    background: rgba(35, 37, 55, 0.6);
+}
+
+.image-preview {
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+    border: 1px solid rgba(125, 125, 255, 0.08);
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.image-card:hover .image-preview img {
+    transform: scale(1.05);
+}
+
+.image-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #e4e4ff;
+    text-align: center;
+    padding: 0.5rem;
+    background: linear-gradient(90deg, rgba(35, 37, 55, 0.6) 0%, rgba(35, 37, 55, 0.3) 100%);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+/* Modal styles */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 11, 17, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background: rgba(25, 27, 40, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(125, 125, 255, 0.15);
+    padding: 2rem;
+    overflow: auto;
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(125, 125, 255, 0.3), transparent);
+}
+
+.modal-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background: linear-gradient(90deg, var(--color-accent-1), var(--color-accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.modal-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-image-container img {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(125, 125, 255, 0.1);
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: #e4e4ff;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.close-button:hover {
+    opacity: 1;
+}

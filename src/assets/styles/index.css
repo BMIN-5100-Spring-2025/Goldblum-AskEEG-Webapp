@@ -1,0 +1,10 @@
+/* Base styles */
+@import '../base.css';
+@import '../main.css';
+
+/* Component styles */
+@import './components/App.css';
+@import './components/Home.css';
+@import './components/ImageGallery.css';
+@import './components/Upload.css';
+@import './components/Auth.css';

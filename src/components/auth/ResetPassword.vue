@@ -4,7 +4,7 @@
     <div v-if="errorMsg" class="error">{{ errorMsg }}</div>
     <div v-if="successMsg" class="success">{{ successMsg }}</div>
     
-    <form @submit.prevent="requestCode" v-if="!codeSent">
+    <form v-if="!codeSent" @submit.prevent="requestCode">
       <div class="form-group">
         <label for="username">Email</label>
         <input 
@@ -17,19 +17,19 @@
       </div>
       <div class="buttons">
         <button type="submit" :disabled="isLoading">
-          {{ isLoading ? 'Sending...' : 'Send Reset Code' }}
+          {{ isLoading ? 'Sending...' : 'Send Verification Code' }}
         </button>
       </div>
     </form>
     
-    <form @submit.prevent="confirmReset" v-else>
+    <form v-if="codeSent" @submit.prevent="confirmReset">
       <div class="form-group">
         <label for="code">Verification Code</label>
         <input 
           id="code"
           v-model="code" 
           type="text" 
-          placeholder="Enter the code from your email"
+          placeholder="Enter verification code"
           required
         />
       </div>
@@ -143,99 +143,4 @@ const confirmReset = async () => {
     isLoading.value = false;
   }
 };
-</script>
-
-<style scoped>
-.auth-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.2rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-input {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #0069d9;
-}
-
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #dc3545;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  background-color: #f8d7da;
-  border-radius: 4px;
-}
-
-.success {
-  color: #28a745;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  background-color: #d4edda;
-  border-radius: 4px;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.links {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.link {
-  background: none;
-  color: #007bff;
-  border: none;
-  padding: 0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.link:hover {
-  color: #0056b3;
-}
-</style> 
+</script> 
