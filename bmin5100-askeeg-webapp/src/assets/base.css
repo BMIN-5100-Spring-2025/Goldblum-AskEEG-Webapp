@@ -1,14 +1,54 @@
-/* Basic styling for the AskEEG webapp */
 :root {
-  --color-background: #ffffff;
+  /* Base colors */
+  --color-background: #f3f5f9;
   --color-text: #181818;
-  --color-primary: #336699;
+  --color-primary: #6c5ce7;
+
+  /* Accent colors for gradients */
+  --color-accent-1: #5e5eff;
+  --color-accent-2: #a066ff;
+  --color-accent-3: #2ecc71;
+
+  /* UI element colors */
+  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-surface-hover: rgba(255, 255, 255, 0.9);
+  --color-surface-active: rgba(255, 255, 255, 1);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+
+  /* Glass effect */
+  --glass-blur: blur(10px);
+  --glass-opacity: 0.8;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #181818;
+    /* Dark mode colors */
+    --color-background: #0a0b11;
     --color-text: #f8f8f8;
+    --color-primary: #8a70ff;
+
+    /* Accent colors for dark mode */
+    --color-accent-1: #7263ff;
+    --color-accent-2: #c175ff;
+    --color-accent-3: #4ecca3;
+
+    /* UI element colors for dark mode */
+    --color-surface: rgba(25, 27, 40, 0.7);
+    --color-surface-hover: rgba(35, 37, 55, 0.8);
+    --color-surface-active: rgba(45, 47, 70, 0.9);
+
+    /* Shadows for dark mode */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+    /* Glass effect for dark mode */
+    --glass-border: 1px solid rgba(125, 125, 255, 0.12);
   }
 }
 
@@ -19,10 +59,17 @@
   margin: 0;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
+  background-image:
+    radial-gradient(circle at top right, rgba(114, 99, 255, 0.08), rgba(10, 11, 17, 0.01) 70%),
+    radial-gradient(circle at bottom left, rgba(193, 117, 255, 0.08), rgba(10, 11, 17, 0.01) 70%);
   line-height: 1.6;
   font-family:
     -apple-system,
@@ -36,8 +83,24 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease;
+}
+
+.glass-card {
+  background: var(--color-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  border: var(--glass-border);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--color-accent-1), var(--color-accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
