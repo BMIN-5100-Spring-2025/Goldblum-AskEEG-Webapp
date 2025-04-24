@@ -1,127 +1,180 @@
 <script setup>
-import ImageGallery from './components/ImageGallery.vue';
+import { ref, onMounted, watch } from 'vue';
+import { signOut as authSignOut, getCurrentUser } from '@aws-amplify/auth';
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter();
+const route = useRoute();
+const isAuthenticated = ref(false);
+const isLoading = ref(true);
+
+// Function to check authentication status
+const checkAuthStatus = async () => {
+  isLoading.value = true;
+  try {
+    const user = await getCurrentUser();
+    isAuthenticated.value = true;
+  } catch (error) {
+    isAuthenticated.value = false;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Watch for route changes to recheck auth status
+watch(() => route.path, (newPath) => {
+  // If coming from a path that might indicate auth state change
+  if (newPath === '/dashboard' || newPath === '/') {
+    checkAuthStatus();
+  }
+});
+
+onMounted(async () => {
+  await checkAuthStatus();
+});
+
+const signOut = async () => {
+  try {
+    await authSignOut();
+    isAuthenticated.value = false;
+    router.push('/signin');
+  } catch (error) {
+    // Silent error handling
+  }
+};
+
+// Export the checkAuthStatus function for use in other components
+defineExpose({ checkAuthStatus });
 </script>
 
 <template>
-  <main>
-    <div class="app-container">
-      <header class="app-header">
-        <h1>AskEEG</h1>
-        <p class="subtitle">EEG Analysis & Visualization Using Natural Language</p>
-      </header>
-      
-      <ImageGallery />
-      
-    </div>
-  </main>
+  <div id="app">
+    <header v-if="isAuthenticated">
+      <nav>
+        <div class="logo">AskEEG App</div>
+        <div class="nav-links">
+          <router-link to="/dashboard">Dashboard</router-link>
+          <router-link to="/upload">Upload</router-link>
+          <router-link to="/gallery">Gallery</router-link>
+          <button @click="signOut" class="sign-out-btn">Sign Out</button>
+        </div>
+      </nav>
+    </header>
+    
+    <main>
+      <div v-if="isLoading" class="loading">Loading...</div>
+      <router-view v-else @auth-state-changed="checkAuthStatus" />
+    </main>
+  </div>
 </template>
 
 <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #343a40;
+  color: white;
+  padding: 1rem;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #ccc;
+}
+
+.nav-links a.router-link-exact-active {
+  color: #17a2b8;
+  font-weight: bold;
+}
+
+.sign-out-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sign-out-btn:hover {
+  background-color: white;
+  color: #343a40;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
 :root {
   --color-accent-1: #7263ff;
   --color-accent-2: #c175ff;
   --color-background-gradient: linear-gradient(135deg, rgba(15, 15, 25, 0.4) 0%, rgba(10, 10, 15, 0.2) 100%);
 }
 
-main {
-  min-height: 100vh;
-  padding: 0;
-  margin: 0;
-}
-
-.app-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.app-header {
-  text-align: center;
-  margin-bottom: 1rem;
-  padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, rgba(35, 35, 60, 0.4) 0%, rgba(25, 25, 45, 0.2) 100%);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(125, 125, 255, 0.12);
-  position: relative;
-  overflow: hidden;
-}
-
-.app-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(125, 125, 255, 0.3), transparent);
-}
-
-.app-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(125, 125, 255, 0.1), transparent);
-}
-
-.app-header h1 {
-  font-size: 3.5rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, var(--color-accent-1), var(--color-accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  opacity: 0.85;
-  margin-top: 0;
-  color: #e4e4ff;
-}
-
-@media (max-width: 768px) {
-  .app-container {
-    padding: 1rem;
-  }
-  
-  .app-header {
-    padding: 1.5rem 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .app-header h1 {
-    font-size: 2.5rem;
-  }
-  
-  .subtitle {
-    font-size: 1rem;
-  }
-}
-
-.app-footer {
-  text-align: center;
-  margin-top: 3rem;
-  padding: 1.5rem;
-  font-size: 0.9rem;
-  opacity: 0.7;
-}
-
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-accent-1: #5e9eff;
-    --color-accent-2: #d16bff;
+  body {
+    background-color: #121212;
+    color: #f0f0f0;
   }
   
-  .app-header {
-    background: linear-gradient(135deg, rgba(30,30,30,0.5) 0%, rgba(20,20,20,0.5) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .app-container {
+    background-color: #1e1e1e;
   }
 }
 </style>
