@@ -11,12 +11,17 @@ const region = import.meta.env.VITE_AWS_REGION;
 const userPoolId = import.meta.env.VITE_COGNITO_USER_POOL_ID;
 const userPoolClientId = import.meta.env.VITE_COGNITO_USER_POOL_WEB_CLIENT_ID;
 const oauthDomain = import.meta.env.VITE_COGNITO_OAUTH_DOMAIN;
-const s3BucketName = import.meta.env.VITE_S3_BUCKET_NAME;
+const identityPoolId = import.meta.env.VITE_COGNITO_IDENTITY_POOL_ID;
 
 // Basic validation
-if (!region || !userPoolId || !userPoolClientId || !oauthDomain || !s3BucketName) {
+if (!region || !userPoolId || !userPoolClientId || !oauthDomain) {
     console.error("Error: Missing required environment variables for AWS configuration.");
-    // TODO: Handle this error appropriately, maybe show a message to the user
+    console.log("Required environment variables:");
+    console.log("- VITE_AWS_REGION");
+    console.log("- VITE_COGNITO_USER_POOL_ID");
+    console.log("- VITE_COGNITO_USER_POOL_WEB_CLIENT_ID");
+    console.log("- VITE_COGNITO_OAUTH_DOMAIN");
+    console.log("- VITE_COGNITO_IDENTITY_POOL_ID (for S3 uploads)");
 }
 
 const awsConfig = {
@@ -24,6 +29,7 @@ const awsConfig = {
         Cognito: {
             userPoolId: userPoolId,
             userPoolClientId: userPoolClientId,
+            identityPoolId: identityPoolId,
             loginWith: {
                 authFlowType: "USER_PASSWORD_AUTH",
                 oauth: {
@@ -36,15 +42,10 @@ const awsConfig = {
                 email: true,
             }
         }
-    },
-    Storage: {
-        S3: {
-            bucket: s3BucketName,
-            region: region,
-        }
     }
 };
 
+console.log("Configuring AWS Amplify with region:", region);
 Amplify.configure(awsConfig);
 
 const app = createApp(App)
