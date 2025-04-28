@@ -27,6 +27,12 @@
         </div>
         
         <div class="action-card">
+          <h3>Dataset Viewer</h3>
+          <p>View metadata for datasets and packages.</p>
+          <router-link to="/dataset-viewer" class="action-btn">View Datasets</router-link>
+        </div>
+        
+        <div class="action-card">
           <h3>Run EEG Analysis</h3>
           <p>Execute EEG synchrony analysis.</p>
           <FargateRunner />

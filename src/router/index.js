@@ -7,6 +7,7 @@ import ResetPassword from '../components/auth/ResetPassword.vue';
 import UploadComponent from '../components/upload/UploadComponent.vue';
 import Home from '../components/Home.vue';
 import ImageGallery from '../components/ImageGallery.vue';
+import DatasetViewer from '../components/DatasetViewer.vue';
 
 const routes = [
     {
@@ -44,6 +45,12 @@ const routes = [
         path: '/gallery',
         name: 'gallery',
         component: ImageGallery,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/dataset-viewer',
+        name: 'datasetViewer',
+        component: DatasetViewer,
         meta: { requiresAuth: true }
     }
 ];
