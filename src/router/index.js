@@ -8,6 +8,7 @@ import UploadComponent from '../components/upload/UploadComponent.vue';
 import Home from '../components/Home.vue';
 import ImageGallery from '../components/ImageGallery.vue';
 import DatasetViewer from '../components/DatasetViewer.vue';
+import DataSegmentRetriever from '../components/DataSegmentRetriever.vue';
 
 const routes = [
     {
@@ -51,6 +52,12 @@ const routes = [
         path: '/dataset-viewer',
         name: 'datasetViewer',
         component: DatasetViewer,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/data-segment',
+        name: 'dataSegment',
+        component: DataSegmentRetriever,
         meta: { requiresAuth: true }
     }
 ];
