@@ -154,6 +154,10 @@
     <div v-if="retrievalResult" class="retrieval-result" :class="{ success: !retrievalResult.error }">
       <h3>{{ retrievalResult.error ? 'Error' : 'Success' }}</h3>
       <p>{{ retrievalResult.message }}</p>
+      <div v-if="!retrievalResult.error && retrievalResult.timestamp" class="folder-info">
+        <p>Your data has been saved to the following location:</p>
+        <code>/data/input/{{ retrievalResult.timestamp }}/{{ outputFilename }}.csv</code>
+      </div>
     </div>
   </div>
 </template>
@@ -161,6 +165,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { fetchAuthSession } from '@aws-amplify/auth';
+import '@/assets/styles/components/DataSegmentRetriever.css';
 
 // Component state
 const datasetId = ref('');
@@ -387,7 +392,9 @@ const retrieveData = async () => {
     
     retrievalResult.value = {
       error: false,
-      message: `Data successfully retrieved and saved to ${result.output_path}`
+      message: `Data successfully retrieved and saved!`,
+      timestamp: result.timestamp_folder,
+      path: result.output_path
     };
     
   } catch (err) {
