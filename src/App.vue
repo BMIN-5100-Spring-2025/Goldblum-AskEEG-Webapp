@@ -58,6 +58,7 @@ defineExpose({ checkAuthStatus });
           <router-link to="/gallery">Gallery</router-link>
           <router-link to="/dataset-viewer">Dataset Viewer</router-link>
           <router-link to="/data-segment">Data Segment</router-link>
+          <router-link to="/data-analysis">Data Analysis</router-link>
           <button @click="signOut" class="sign-out-btn">Sign Out</button>
         </div>
       </nav>

@@ -9,6 +9,7 @@ import Home from '../components/Home.vue';
 import ImageGallery from '../components/ImageGallery.vue';
 import DatasetViewer from '../components/DatasetViewer.vue';
 import DataSegmentRetriever from '../components/DataSegmentRetriever.vue';
+import DataAnalysis from '../components/DataAnalysis.vue';
 
 const routes = [
     {
@@ -58,6 +59,12 @@ const routes = [
         path: '/data-segment',
         name: 'dataSegment',
         component: DataSegmentRetriever,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/data-analysis',
+        name: 'dataAnalysis',
+        component: DataAnalysis,
         meta: { requiresAuth: true }
     }
 ];
