@@ -25,7 +25,17 @@
           <p>View your analyzed EEG data visualizations.</p>
           <router-link to="/gallery" class="action-btn">View Gallery</router-link>
         </div>
+        
+        <div class="action-card">
+          <h3>Run EEG Analysis</h3>
+          <p>Execute EEG synchrony analysis.</p>
+          <FargateRunner />
+        </div>
       </div>
     </div>
   </div>
-</template> 
+</template>
+
+<script setup>
+import FargateRunner from './FargateRunner.vue';
+</script>
