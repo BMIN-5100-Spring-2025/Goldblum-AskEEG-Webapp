@@ -51,7 +51,7 @@ defineExpose({ checkAuthStatus });
   <div id="app">
     <header v-if="isAuthenticated" class="app-header">
       <nav>
-        <div class="logo gradient-text">AskEEG</div>
+        <div class="logo gradient-text" @click="router.push('/dashboard')" style="cursor: pointer;">AskEEG</div>
         <div class="nav-links">
           <router-link to="/dashboard">Dashboard</router-link>
           <router-link to="/upload">Upload</router-link>
