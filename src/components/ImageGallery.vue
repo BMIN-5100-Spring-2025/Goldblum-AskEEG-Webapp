@@ -143,7 +143,7 @@ const closeModal = () => {
 
 <style scoped>
 h3 {
-  color: #333
+  font-size: 1.5rem;
 }
 
 .image-gallery-container {
@@ -164,7 +164,7 @@ h3 {
 .current-analysis {
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #f0f7ff;
+  background: rgba(75, 86, 131, 0.5);
   border-radius: 4px;
 }
 
@@ -175,7 +175,7 @@ h3 {
 }
 
 .image-card {
-  background-color: white;
+  background: rgba(75, 86, 131, 0.5);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -203,7 +203,6 @@ h3 {
   padding: 10px;
   text-align: center;
   font-weight: bold;
-  color: #333;
 }
 
 .modal-backdrop {
@@ -228,7 +227,6 @@ h3 {
 }
 
 .modal-content {
-  background-color: white;
   border-radius: 8px;
   padding: 20px;
   max-width: 90%;

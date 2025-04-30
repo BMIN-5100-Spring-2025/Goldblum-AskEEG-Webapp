@@ -7,9 +7,7 @@ import ResetPassword from '../components/auth/ResetPassword.vue';
 import UploadComponent from '../components/upload/UploadComponent.vue';
 import Home from '../components/Home.vue';
 import ImageGallery from '../components/ImageGallery.vue';
-import DatasetViewer from '../components/DatasetViewer.vue';
-import DataSegmentRetriever from '../components/DataSegmentRetriever.vue';
-import DataAnalysis from '../components/DataAnalysis.vue';
+import DataWorkflow from '../components/DataWorkflow.vue';
 
 const routes = [
     {
@@ -50,21 +48,9 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/dataset-viewer',
-        name: 'datasetViewer',
-        component: DatasetViewer,
-        meta: { requiresAuth: true }
-    },
-    {
-        path: '/data-segment',
-        name: 'dataSegment',
-        component: DataSegmentRetriever,
-        meta: { requiresAuth: true }
-    },
-    {
-        path: '/data-analysis',
-        name: 'dataAnalysis',
-        component: DataAnalysis,
+        path: '/workflow',
+        name: 'workflow',
+        component: DataWorkflow,
         meta: { requiresAuth: true }
     }
 ];

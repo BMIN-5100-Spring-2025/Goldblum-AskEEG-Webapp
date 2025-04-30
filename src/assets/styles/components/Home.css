@@ -6,13 +6,13 @@
 
 .app-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-8);
 }
 
 .app-header h1 {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(to right, var(--color-accent-1), var(--color-accent-2));
+    margin-bottom: var(--space-2);
+    background: linear-gradient(to right, var(--primary-400), var(--accent-purple));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -20,67 +20,79 @@
 
 .subtitle {
     font-size: 1.1rem;
-    opacity: 0.8;
+    color: var(--text-secondary);
 }
 
 .dashboard-content {
-    padding: 2rem;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: var(--space-6);
+    background-color: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    border: var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .welcome-section {
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-6);
     text-align: center;
 }
 
 .welcome-section h2 {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     font-size: 1.8rem;
+    color: var(--text-primary);
+}
+
+.welcome-section p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--text-secondary);
 }
 
 .actions-section {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: var(--space-5);
     flex-wrap: wrap;
 }
 
 .action-card {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 1.5rem;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    padding: var(--space-5);
     width: 300px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .action-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
 }
 
 .action-card h3 {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     font-size: 1.4rem;
+    color: var(--text-primary);
 }
 
 .action-card p {
-    margin-bottom: 1.5rem;
-    opacity: 0.8;
+    margin-bottom: var(--space-5);
+    color: var(--text-secondary);
 }
 
 .action-btn {
     display: inline-block;
-    background: linear-gradient(to right, var(--color-accent-1), var(--color-accent-2));
+    background: linear-gradient(to right, var(--primary-400), var(--primary-600));
     color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 4px;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--border-radius-sm);
     text-decoration: none;
     font-weight: 500;
-    transition: opacity 0.2s;
+    transition: opacity var(--transition-fast);
 }
 
 .action-btn:hover {

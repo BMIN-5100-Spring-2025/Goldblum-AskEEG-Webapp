@@ -74,8 +74,10 @@ body {
   color: var(--color-text);
   background: var(--color-background);
   background-image:
-    radial-gradient(circle at top right, rgba(114, 99, 255, 0.08), rgba(10, 11, 17, 0.01) 70%),
-    radial-gradient(circle at bottom left, rgba(193, 117, 255, 0.08), rgba(10, 11, 17, 0.01) 70%);
+    radial-gradient(circle at top right, rgba(114, 99, 255, 0.08), rgba(10, 11, 17, 0.01) 100%),
+    radial-gradient(circle at bottom left, rgba(193, 117, 255, 0.08), rgba(10, 11, 17, 0.01) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   line-height: 1.6;
   font-family:
     -apple-system,
