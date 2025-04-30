@@ -776,8 +776,40 @@ const runAnalysis = async () => {
     
     // Store the output directory in localStorage so the gallery can find it
     if (results.value && results.value.output_dir) {
+      const currentTimestamp = results.value.timestamp || new Date().toISOString();
       localStorage.setItem('last_analysis_dir', results.value.output_dir);
-      localStorage.setItem('last_analysis_timestamp', results.value.timestamp || new Date().toISOString());
+      localStorage.setItem('last_analysis_timestamp', currentTimestamp);
+      
+      // Add this analysis to the history
+      const analysisName = outputName.value || 'EEG Synchrony Analysis';
+      const newAnalysis = {
+        id: `analysis_${Date.now()}`,
+        name: analysisName,
+        timestamp: currentTimestamp,
+        path: results.value.output_dir
+      };
+      
+      // Get existing history
+      const savedHistory = localStorage.getItem('analysis_history');
+      let history = savedHistory ? JSON.parse(savedHistory) : [];
+      
+      // Check if this analysis already exists in history to avoid duplicates
+      const existingIndex = history.findIndex(item => item.path === results.value.output_dir);
+      if (existingIndex === -1) {
+        // Add to the beginning of the array (most recent first)
+        history.unshift(newAnalysis);
+      } else {
+        // Update the existing entry
+        history[existingIndex] = newAnalysis;
+      }
+      
+      // Limit history to 10 items
+      if (history.length > 10) {
+        history = history.slice(0, 10);
+      }
+      
+      // Save updated history to localStorage
+      localStorage.setItem('analysis_history', JSON.stringify(history));
     }
     
     analysisComplete.value = true;
