@@ -42,10 +42,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { uploadData } from '@aws-amplify/storage';
+import { ref, onMounted } from 'vue';
+import { fetchAuthSession, getCurrentUser } from '@aws-amplify/auth';
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
+import { v4 as uuidv4 } from 'uuid';
 
-const bucketName = import.meta.env.VITE_S3_BUCKET_NAME;
+const bucketName = import.meta.env.VITE_S3_BUCKET_NAME || "bmin5100-askeeg-user-uploads";
+const region = import.meta.env.VITE_AWS_REGION || "us-east-1";
+const identityPoolId = import.meta.env.VITE_COGNITO_IDENTITY_POOL_ID || "us-east-1:6c006afe-1718-48c8-875f-51f7de84d8f7";
 
 const fileInput = ref(null);
 const selectedFile = ref(null);
@@ -54,6 +60,21 @@ const successMsg = ref('');
 const isUploading = ref(false);
 const uploadProgress = ref(0);
 const isDragover = ref(false);
+
+function makeSafeS3Key(string) {
+  return string.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+}
+
+// Check auth status on component mount
+onMounted(async () => {
+  try {
+    // Verify the user is authenticated
+    await getCurrentUser();
+  } catch (error) {
+    console.error('Authentication error:', error);
+    errorMsg.value = 'Please sign in to upload files';
+  }
+});
 
 const handleFileSelect = (event) => {
   const file = event.target.files[0];
@@ -108,31 +129,66 @@ const uploadFile = async () => {
   isUploading.value = true;
   uploadProgress.value = 0;
   
-  const fileName = `eeg-files/${Date.now()}-${selectedFile.value.name}`;
-  
   try {
-    const result = await uploadData({
-      key: fileName,
-      data: selectedFile.value,
-      options: {
-        onProgress: (progress) => {
-          uploadProgress.value = Math.round((progress.loaded / progress.total) * 100);
-        },
+    // Get auth session for Cognito tokens
+    const authSession = await fetchAuthSession();
+    
+    // Extract cognito identity provider from the token issuer
+    const poolResource = authSession.tokens.idToken.payload.iss.replace("https://","");
+    
+    // Create logins map for Cognito Identity Pool
+    let logins = {};
+    logins[poolResource] = authSession.tokens.idToken.toString();
+    
+    // Generate unique ID for the upload
+    const jobId = uuidv4();
+    const filename = `${jobId}/${makeSafeS3Key(selectedFile.value.name)}`;
+    
+    // Create S3 client with Cognito Identity Pool credentials
+    const s3Client = new S3Client({
+      region: region,
+      credentials: fromCognitoIdentityPool({
+        identityPoolId: identityPoolId,
+        clientConfig: { region: region },
+        logins: logins
+      })
+    });
+    
+    // Set up the upload
+    const parallelUpload = new Upload({
+      client: s3Client,
+      queueSize: 4,
+      leavePartsOnError: false,
+      params: {
+        Bucket: bucketName,
+        Key: filename,
+        Body: selectedFile.value,
+        ContentType: selectedFile.value.type
       }
     });
     
-    if (result.key) {
-      successMsg.value = 'File uploaded successfully!';
-      selectedFile.value = null;
-      if (fileInput.value) {
-        fileInput.value.value = '';
+    // Track upload progress
+    parallelUpload.on("httpUploadProgress", (progress) => {
+      if (progress.total) {
+        uploadProgress.value = Math.round((progress.loaded / progress.total) * 100);
       }
-    } else {
-      errorMsg.value = 'Failed to upload file';
+    });
+    
+    // Execute the upload
+    await parallelUpload.done();
+    
+    successMsg.value = 'File uploaded successfully!';
+    selectedFile.value = null;
+    if (fileInput.value) {
+      fileInput.value.value = '';
     }
   } catch (error) {
     console.error('Error uploading file:', error);
-    errorMsg.value = error.message || 'Failed to upload file';
+    if (error.message === 'No credentials' || error.message.includes('Credentials should not be empty')) {
+      errorMsg.value = 'Authentication error. Please sign out and sign in again.';
+    } else {
+      errorMsg.value = error.message || 'Failed to upload file';
+    }
   } finally {
     isUploading.value = false;
   }
