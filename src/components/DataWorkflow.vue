@@ -334,8 +334,14 @@
             {{ analysisError }}
           </div>
           
-          <div v-if="analysisComplete" class="success-message">
-            <p>Analysis completed successfully! Redirecting to Gallery to view results...</p>
+          <div v-if="analysisComplete" class="retrieval-result success">
+            <h3>Success</h3>
+            <p>Analysis completed successfully!</p>
+            <div v-if="results && results.output_dir" class="folder-info">
+              <p>Your results have been saved to the following location:</p>
+              <code>{{ results.output_dir }}</code>
+              <p style="margin-top: var(--space-2);">Redirecting to Gallery to view results...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -872,6 +878,14 @@ watch(startTime, (newValue) => {
 watch(endTime, (newValue) => {
   validateEndTime();
 });
+
+// Add watcher for currentStep to refresh data files when user navigates to Analyze Data tab
+watch(currentStep, (newValue) => {
+  if (newValue === 2) {
+    // User has navigated to the Analyze Data tab, refresh the file list
+    fetchDataFiles();
+  }
+});
 </script>
 
 <style scoped>
@@ -899,6 +913,8 @@ watch(endTime, (newValue) => {
   border-radius: var(--border-radius-md);
   transition: all var(--transition-fast);
   color: var(--text-tertiary);
+  border: 1px solid var(--border-medium);
+  margin: 0 var(--space-2);
 }
 
 .workflow-step.active {
@@ -920,7 +936,7 @@ watch(endTime, (newValue) => {
 }
 
 .workflow-step.active .step-number {
-  background-color: var(--primary-500);
+  background-color: var(--primary-600);
   color: white;
 }
 
@@ -1178,6 +1194,19 @@ select {
 
 input[type="range"] {
   width: 100%;
+  accent-color: var(--primary-500);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  background: var(--primary-500);
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: var(--primary-500);
+}
+
+input[type="range"]::-ms-thumb {
+  background: var(--primary-500);
 }
 
 label {

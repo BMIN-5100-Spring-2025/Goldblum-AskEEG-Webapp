@@ -8,6 +8,7 @@ import UploadComponent from '../components/upload/UploadComponent.vue';
 import Home from '../components/Home.vue';
 import ImageGallery from '../components/ImageGallery.vue';
 import DataWorkflow from '../components/DataWorkflow.vue';
+import NaturalLanguageQuery from '../components/NaturalLanguageQuery.vue';
 
 const routes = [
     {
@@ -51,6 +52,12 @@ const routes = [
         path: '/workflow',
         name: 'workflow',
         component: DataWorkflow,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/nlp-query',
+        name: 'nlpQuery',
+        component: NaturalLanguageQuery,
         meta: { requiresAuth: true }
     }
 ];

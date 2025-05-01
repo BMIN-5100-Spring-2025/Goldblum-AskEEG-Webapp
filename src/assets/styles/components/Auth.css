@@ -67,10 +67,14 @@ button:disabled {
     border-radius: 4px;
 }
 
-.buttons {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
+.signin-btn {
+    background-color: #6366f1;
+    color: white;
+  }
+
+.signin-btn:hover:not(:disabled) {
+    background-color: #4f46e5;
+
 }
 
 .links {

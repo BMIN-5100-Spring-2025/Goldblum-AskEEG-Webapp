@@ -1,6 +1,10 @@
 <template>
   <div class="auth-container">
-    <h2>Sign In</h2>
+    <div class="logo-container">
+      <img src="@/assets/logo.png" alt="AskEEG Logo" class="auth-logo" />
+      <h1 class="app-title">AskEEG</h1>
+    </div>
+    <h3>Sign In</h3>
     <div v-if="errorMsg" class="error">{{ errorMsg }}</div>
     <form @submit.prevent="signIn">
       <div class="form-group">
@@ -23,8 +27,8 @@
           required
         />
       </div>
-      <div class="buttons">
-        <button type="submit" :disabled="isLoading">
+      <div class="buttons" style="text-align: center;">
+        <button type="submit" class="signin-btn" :disabled="isLoading">
           {{ isLoading ? 'Signing in...' : 'Sign In' }}
         </button>
       </div>
@@ -121,4 +125,34 @@ const forgotPassword = async () => {
     errorMsg.value = error.message || 'Failed to initiate password reset';
   }
 };
-</script> 
+</script>
+
+<style scoped>
+h3 {
+  font-size: 1.5rem;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.5rem;
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6366f1;
+  margin: 0;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+</style> 

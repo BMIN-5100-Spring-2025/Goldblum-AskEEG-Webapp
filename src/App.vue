@@ -51,11 +51,15 @@ defineExpose({ checkAuthStatus });
   <div id="app">
     <header v-if="isAuthenticated" class="app-header">
       <nav>
-        <div class="logo gradient-text" @click="router.push('/dashboard')" style="cursor: pointer;">AskEEG</div>
+        <div class="logo-container" @click="router.push('/dashboard')" style="cursor: pointer;">
+          <img src="@/assets/logo.png" alt="AskEEG Logo" class="nav-logo" />
+          <span class="logo gradient-text">AskEEG</span>
+        </div>
         <div class="nav-links">
           <router-link to="/dashboard">Dashboard</router-link>
           <router-link to="/upload">Upload</router-link>
           <router-link to="/workflow">EEG Workflow</router-link>
+          <router-link to="/nlp-query">Natural Language Query</router-link>
           <router-link to="/gallery">Gallery</router-link>
           <button @click="signOut" class="btn btn-outline">Sign Out</button>
         </div>
@@ -115,6 +119,17 @@ defineExpose({ checkAuthStatus });
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nav-logo {
+  width: 32px;
+  height: 32px;
 }
 
 .nav-links {

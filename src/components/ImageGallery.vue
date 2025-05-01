@@ -183,8 +183,6 @@ const loadImagesFromDirectory = async (directoryPath) => {
       // Use absolute URL pointing directly to Flask server instead of relying on proxy
       const path = `http://localhost:5012/static/output/${folderName}/${name}`;
       
-      console.log(`Generated path for ${name}: ${path}`);
-      
       return {
         path,
         name,
@@ -276,6 +274,9 @@ const closeModal = () => {
       <h3>Analysis History</h3>
       <div v-if="analysisResults.length === 0" class="no-history">
         <p>No analysis history found. Run an EEG synchrony analysis from the Data Analysis tab.</p>
+        <div class="button-group" style="margin-top: var(--space-4); text-align: center;">
+          <router-link to="/workflow" class="action-btn" style="display: inline-block; text-decoration: none;">Go to Data Workflow</router-link>
+        </div>
       </div>
       
       <div v-else class="analysis-list">
@@ -291,7 +292,7 @@ const closeModal = () => {
               <span class="analysis-timestamp">{{ formatDate(analysis.timestamp) }}</span>
             </div>
             <div class="analysis-actions">
-              <button class="delete-btn" @click="deleteAnalysis(analysis, $event)" title="Delete analysis">
+              <button class="delete-btn secondary-btn" @click="deleteAnalysis(analysis, $event)" title="Delete analysis">
                 ✕
               </button>
               <div class="expand-icon">
@@ -312,6 +313,9 @@ const closeModal = () => {
             
             <div v-if="images.length === 0" class="no-results">
               <p>No images found for this analysis.</p>
+              <div class="button-group" style="margin-top: var(--space-4); text-align: center;">
+                <router-link to="/workflow" class="action-btn" style="display: inline-block; text-decoration: none;">Run New Analysis</router-link>
+              </div>
             </div>
           </div>
         </div>
@@ -332,59 +336,92 @@ const closeModal = () => {
 </template>
 
 <style scoped>
-h3 {
-  font-size: 1.5rem;
-}
-
 .image-gallery-container {
-  max-width: 1200px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--space-5);
 }
 
 .gallery-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: var(--space-6);
 }
 
 .gallery-header h2 {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
+  color: var(--text-primary);
+}
+
+.gallery-header p {
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .analysis-history {
-  margin-bottom: 30px;
+  margin-bottom: var(--space-6);
+}
+
+.analysis-history h3 {
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+  font-size: 1.5rem;
 }
 
 .analysis-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
 .analysis-item {
-  background: rgba(75, 86, 131, 0.3);
-  border-radius: 8px;
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
 }
 
 .analysis-item.expanded {
-  background: rgba(75, 86, 131, 0.5);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-400);
+  background-color: rgb(31 30 50);
+}
+
+.analysis-item.expanded .analysis-header {
+  background-color: rgb(31 30 50);
+  color: var(--primary-300);
+}
+
+.analysis-item.expanded .analysis-info h4 {
+  color: var(--primary-300);
+}
+
+.analysis-item.expanded .analysis-timestamp {
+  color: var(--primary-100);
+}
+
+.analysis-item.expanded .delete-btn {
+  color: var(--primary-200);
+}
+
+.analysis-item.expanded .expand-icon {
+  color: var(--primary-200);
 }
 
 .analysis-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding: var(--space-3) var(--space-4);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
 }
 
 .analysis-header:hover {
-  background-color: rgba(85, 96, 141, 0.5);
+  background-color: var(--bg-tertiary);
 }
 
 .analysis-info {
@@ -395,12 +432,13 @@ h3 {
 .analysis-info h4 {
   margin: 0;
   font-size: 1.1rem;
+  color: var(--text-primary);
 }
 
 .analysis-timestamp {
   font-size: 0.9rem;
-  opacity: 0.7;
-  margin-top: 5px;
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
 }
 
 .analysis-actions {
@@ -411,71 +449,83 @@ h3 {
 .delete-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-tertiary);
   font-size: 1rem;
   cursor: pointer;
-  padding: 5px 8px;
-  margin-right: 10px;
-  border-radius: 4px;
-  transition: all 0.2s;
+  padding: var(--space-1) var(--space-2);
+  margin-right: var(--space-2);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
 }
 
 .delete-btn:hover {
-  background-color: rgba(255, 100, 100, 0.3);
-  color: #fff;
+  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--danger);
 }
 
 .expand-icon {
   font-size: 1.2rem;
+  color: var(--text-tertiary);
 }
 
 .analysis-content {
-  padding: 15px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-4);
+  border-top: 1px solid var(--primary-800);
+  background-color: var(--bg-card);
 }
 
 .no-history, .no-results {
   text-align: center;
-  padding: 20px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: var(--space-5);
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-light);
 }
 
 .image-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 10px;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
 }
 
 .image-card {
-  background: rgba(75, 86, 131, 0.5);
-  border-radius: 8px;
+  background-color: var(--bg-tertiary);
+  border-radius: var(--border-radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .image-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-300);
 }
 
 .image-preview {
   height: 200px;
   overflow: hidden;
+  background-color: var(--bg-secondary);
 }
 
 .image-preview img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background-color: transparent;
 }
 
 .image-title {
-  padding: 10px;
+  padding: var(--space-3);
   text-align: center;
-  font-weight: bold;
+  font-weight: 500;
+  color: var(--text-primary);
+  background-color: rgb(31 30 50);
+  border-top: 1px solid var(--border-light);
 }
 
 .modal-backdrop {
@@ -484,14 +534,14 @@ h3 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.75);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
 }
 
 .modal-backdrop.active {
@@ -500,24 +550,45 @@ h3 {
 }
 
 .modal-content {
-  background: rgba(45, 55, 90, 0.9);
-  border-radius: 8px;
-  padding: 20px;
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-5);
   max-width: 90%;
   max-height: 90%;
   overflow: auto;
   position: relative;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-medium);
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: var(--space-3);
+  right: var(--space-3);
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: #fff;
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color var(--transition-fast);
+}
+
+.close-button:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.modal-content h3 {
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+  text-align: center;
+  padding-right: var(--space-8);
 }
 
 .modal-image-container {
@@ -527,5 +598,52 @@ h3 {
 .modal-image-container img {
   max-width: 100%;
   max-height: 80vh;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+@media (max-width: 768px) {
+  .image-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analysis-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .analysis-actions {
+    margin-top: var(--space-2);
+    align-self: flex-end;
+  }
+}
+
+button {
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color var(--transition-fast);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.action-btn {
+  background-color: var(--primary-500);
+  color: white;
+  margin-right: var(--space-3);
+}
+
+.action-btn:hover:not(:disabled) {
+  background-color: var(--primary-600);
+}
+
+.secondary-btn {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
 }
 </style> 
