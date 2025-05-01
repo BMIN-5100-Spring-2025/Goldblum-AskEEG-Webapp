@@ -45,7 +45,6 @@ const awsConfig = {
     }
 };
 
-console.log("Configuring AWS Amplify with region:", region);
 Amplify.configure(awsConfig);
 
 const app = createApp(App)

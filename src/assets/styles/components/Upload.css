@@ -3,8 +3,6 @@
     max-width: 600px;
     margin: 2rem auto;
     padding: 2rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -29,17 +27,16 @@ h2 {
 
 .custom-file-upload {
     display: inline-block;
-    background-color: #007bff;
+    background-color: var(--primary-500);
     color: white;
     padding: 0.6rem 1.2rem;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 1rem;
     transition: background-color 0.2s;
 }
 
 .custom-file-upload:hover {
-    background-color: #0069d9;
+    background-color: var(--primary-600);
 }
 
 .selected-file {
